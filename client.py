@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt
+import os
 
 # Variables
 
@@ -22,13 +23,14 @@ def switch2():
 """
 Determine if there are enough ingredients to make the order. If not, It prints a message.
 """
-def check_on_stock(order, option):
+def check_on_stock(order, option, client):
+	print("Comprando si hay stock...")
 	if option == True:
-		client.publish("orders/order/", order)
+		client.publish("restaurant/orders/order", order)
 	else:
 		print ("ups, parece que no queda!")
 
-""" 
+"""
 
 """
 def on_message(client, user_data, message):
@@ -38,18 +40,18 @@ def on_message(client, user_data, message):
     }
 
     func = switcher.get(message.topic + ' - ' + message.payload)
-    
+
     func(client, message)
 
 
 # Starting the program...
 
 print("Creating a new instance")
-client = mqtt.client("iot-restaurant")
+client = mqtt.Client("iot-restaurant")
 client.on_message = on_message
 
 print("connecting to broker")
-client.connect(broker_address, port=1883, timeout=60, source_address=None)
+client.connect(broker_address, 1883, 60)
 
 def menu():
 
@@ -69,7 +71,7 @@ def menu():
 
 	print ("\t9 - salir")
 
- 
+
 
 while True:
 
@@ -81,13 +83,12 @@ while True:
 
 	opcionMenu = input("inserta un numero valor >> ")
 
-	
 
 	if opcionMenu=="1":
 
 		print ("Has seleccionado Slow Cooker Texas Pulled Pork")
 
-		check_on_stock(opcionMenu, option1)
+		check_on_stock(opcionMenu, option1, client)
 
 		input("Has pulsado la opción 1...\npulsa una tecla para continuar")
 
@@ -95,7 +96,7 @@ while True:
 
 		print ("Has seleccionado Slow Cooker Pork Ramen")
 
-		check_on_stock(opcionMenu, option2)
+		check_on_stock(opcionMenu, option2, client)
 
 		input("Has pulsado la opción 2...\npulsa una tecla para continuar")
 

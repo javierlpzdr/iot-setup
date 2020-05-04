@@ -14,11 +14,11 @@ option2 = True # Variable that determines if the second dish is availble
 Change theirs the variable associated to true/false. Regarding to the stock of the dish, it will
 be updated through a message from the broker
 """
-def switch1():
-	option1 = not option1
+def switch1(payload):
+	option1 = payload
 
-def switch2():
-	option2 = not option2
+def switch2(payload):
+	option2 = payload
 
 """
 Determine if there are enough ingredients to make the order. If not, It prints a message.
@@ -27,6 +27,7 @@ def check_on_stock(order, option, client):
 	print("Comprando si hay stock...")
 	if option == True:
 		client.publish("restaurant/orders/order", order)
+		print ("Orden hecha!")
 	else:
 		print ("ups, parece que no queda!")
 
@@ -35,13 +36,13 @@ def check_on_stock(order, option, client):
 """
 def on_message(client, user_data, message):
     switcher = {
-        'restaurant/dishes/1 - switch': switch1,
-        'restaurant/dishes/1 - switch': switch2
+        'restaurant/dishes/dish/1': switch1,
+        'restaurant/dishes/dish/2': switch2
     }
 
-    func = switcher.get(message.topic + ' - ' + message.payload)
+    func = switcher.get(message.topic)
 
-    func(client, message)
+    func(message.payload)
 
 
 # Starting the program...

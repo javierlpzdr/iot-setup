@@ -10,16 +10,6 @@ option2="false" # Variable that determines if the second dish is availble
 
 # Functions
 
-""" Swith functions
-Change theirs the variable associated to true/false. Regarding to the stock of the dish, it will
-be updated through a message from the broker
-"""
-def switch1(payload, option):
-	option = payload
-
-def switch2(payload, option):
-	option = payload
-
 """
 Determine if there are enough ingredients to make the order. If not, It prints a message.
 """
@@ -39,15 +29,10 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("restaurant/dishes/dish/#")
 
 def on_message(client, user_data, message):
-    switcher = {
-        'restaurant/dishes/dish/1': switch1,
-        'restaurant/dishes/dish/2': switch2
-    }
-
-    func = switcher.get(message.topic)
-
-    func(message.payload, option)
-
+	if message.topic=="restaurant/dishes/dish/1":
+		option1=message.payload
+	elif message.topic=="restaurant/dishes/dish/2":
+		option2=message.payload
 
 # Starting the program...
 

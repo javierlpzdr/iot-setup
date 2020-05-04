@@ -4,7 +4,7 @@ import os
 # Variables
 
 broker_address="localhost"
-option1="true" # Variable that determines if the first dish is available
+option1="false" # Variable that determines if the first dish is available
 option2="false" # Variable that determines if the second dish is availble
 
 
@@ -38,8 +38,10 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, user_data, message):
 	if message.topic=="restaurant/dishes/dish/1":
+		global option1
 		option1=message.payload
 	elif message.topic=="restaurant/dishes/dish/2":
+		global option2
 		option2=message.payload
 
 # Starting the program...
@@ -100,7 +102,7 @@ while True:
 
 		input("Has pulsado la opción 2...\npulsa una tecla para continuar")
 
-	elif opcionMenu=="9":
+	elif opcionMenu=="3":
 
 		break
 

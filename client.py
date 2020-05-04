@@ -13,9 +13,17 @@ option2="false" # Variable that determines if the second dish is availble
 """
 Determine if there are enough ingredients to make the order. If not, It prints a message.
 """
-def check_on_stock(order, option, client):
+def check_on_stock1(order, client):
 	print("Comprando si hay stock...")
-	if option == 'true':
+	if option1 == 'true':
+		client.publish("restaurant/orders/order", order)
+		print ("Orden hecha!")
+	else:
+		print ("ups, parece que no queda!")
+
+def check_on_stock2(order, client):
+	print("Comprando si hay stock...")
+	if option2 == 'true':
 		client.publish("restaurant/orders/order", order)
 		print ("Orden hecha!")
 	else:
@@ -80,7 +88,7 @@ while True:
 
 		print ("Has seleccionado Slow Cooker Texas Pulled Pork")
 
-		check_on_stock(opcionMenu, option1, client)
+		check_on_stock1(opcionMenu, client)
 
 		input("Has pulsado la opción 1...\npulsa una tecla para continuar")
 
@@ -88,7 +96,7 @@ while True:
 
 		print ("Has seleccionado Slow Cooker Pork Ramen")
 
-		check_on_stock(opcionMenu, option2, client)
+		check_on_stock2(opcionMenu, client)
 
 		input("Has pulsado la opción 2...\npulsa una tecla para continuar")
 

@@ -4,8 +4,8 @@ import os
 # Variables
 
 broker_address="localhost"
-option1 = True # Variable that determines if the first dish is available
-option2 = True # Variable that determines if the second dish is availble
+option1="true" # Variable that determines if the first dish is available
+option2="false" # Variable that determines if the second dish is availble
 
 
 # Functions
@@ -14,18 +14,18 @@ option2 = True # Variable that determines if the second dish is availble
 Change theirs the variable associated to true/false. Regarding to the stock of the dish, it will
 be updated through a message from the broker
 """
-def switch1(payload):
-	option1 = payload
+def switch1(payload, option):
+	option = payload
 
-def switch2(payload):
-	option2 = payload
+def switch2(payload, option):
+	option = payload
 
 """
 Determine if there are enough ingredients to make the order. If not, It prints a message.
 """
 def check_on_stock(order, option, client):
 	print("Comprando si hay stock...")
-	if option == True:
+	if option == 'true':
 		client.publish("restaurant/orders/order", order)
 		print ("Orden hecha!")
 	else:
@@ -34,6 +34,10 @@ def check_on_stock(order, option, client):
 """
 
 """
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
+    client.subscribe("restaurant/dishes/dish/#")
+
 def on_message(client, user_data, message):
     switcher = {
         'restaurant/dishes/dish/1': switch1,
@@ -42,18 +46,20 @@ def on_message(client, user_data, message):
 
     func = switcher.get(message.topic)
 
-    func(message.payload)
+    func(message.payload, option)
 
 
 # Starting the program...
 
 print("Creating a new instance")
 client = mqtt.Client("iot-restaurant")
+client.on_connect = on_connect
 client.on_message = on_message
 
 print("connecting to broker")
 client.connect(broker_address, 1883, 60)
 
+client.loop_start()
 def menu():
 
 	"""

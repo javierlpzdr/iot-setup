@@ -4,8 +4,8 @@ import os
 # Variables
 
 broker_address="localhost"
-option1="false" # Variable that determines if the first dish is available
-option2="false" # Variable that determines if the second dish is availble
+option1=b"false" # Variable that determines if the first dish is available
+option2=b"false" # Variable that determines if the second dish is availble
 
 
 # Functions
@@ -15,7 +15,7 @@ Determine if there are enough ingredients to make the order. If not, It prints a
 """
 def check_on_stock1(order, client):
 	print("Comprando si hay stock...")
-	if option1 == 'true':
+	if option1 == b"true":
 		client.publish("restaurant/orders/order", order)
 		print ("Orden hecha!")
 	else:
@@ -23,7 +23,7 @@ def check_on_stock1(order, client):
 
 def check_on_stock2(order, client):
 	print("Comprando si hay stock...")
-	if option2 == 'true':
+	if option2 == b'true':
 		client.publish("restaurant/orders/order", order)
 		print ("Orden hecha!")
 	else:
@@ -71,7 +71,7 @@ def menu():
 
 	print ("\t2 - Slow Cooker Pork Ramen")
 
-	print ("\t9 - salir")
+	print ("\t3 - salir")
 
 
 
